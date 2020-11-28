@@ -12,25 +12,15 @@ abstract class ConfigNode extends Dynamic {
 
   def selectDynamic(segment: String): ConfigNode
 
-  def getInt: Option[Int]
+  def int: Option[Int]
 
-  def int: Int
+  def double: Option[Double]
 
-  def getDouble: Option[Double]
+  def string: Option[String]
 
-  def double: Double
+  def boolean: Option[Boolean]
 
-  def getString: Option[String]
-
-  def string: String
-
-  def getBoolean: Option[Boolean]
-
-  def boolean: Boolean
-
-  def getList: Option[List[Any]]
-
-  def list: List[Any]
+  def list: Option[List[Any]]
 
   override def toString: String = s"$path ($asString)"
 }
@@ -43,25 +33,15 @@ class ConfigUndefined(val path: String) extends ConfigNode with Dynamic {
 
   def selectDynamic(segment: String): ConfigUndefined = this
 
-  def getInt: Option[Int] = None
+  def int: Option[Int] = None
 
-  def int: Int = undefined
+  def double: Option[Double] = None
 
-  def getDouble: Option[Double] = None
+  def string: Option[String] = None
 
-  def double: Double = undefined
+  def boolean: Option[Boolean] = None
 
-  def getString: Option[String] = None
-
-  def string: String = undefined
-
-  def getBoolean: Option[Boolean] = None
-
-  def boolean: Boolean = undefined
-
-  def getList: Option[List[Any]] = None
-
-  def list: List[Any] = undefined
+  def list: Option[List[Any]] = None
 }
 
 class ConfigBranch(val path: String, obj: ConfigObject, val value: Map[String, AnyRef], val asString: String)
@@ -91,50 +71,30 @@ class ConfigBranch(val path: String, obj: ConfigObject, val value: Map[String, A
 
   private def notPrimitive = sys.error(s"path $path is an object not a value")
 
-  def getInt: Option[Int] = notPrimitive
+  def int: Option[Int] = notPrimitive
 
-  def int: Int = notPrimitive
+  def double: Option[Double] = notPrimitive
 
-  def getDouble: Option[Double] = notPrimitive
+  def string: Option[String] = notPrimitive
 
-  def double: Double = notPrimitive
+  def boolean: Option[Boolean] = notPrimitive
 
-  def getString: Option[String] = notPrimitive
-
-  def string: String = notPrimitive
-
-  def getBoolean: Option[Boolean] = notPrimitive
-
-  def boolean: Boolean = notPrimitive
-
-  def getList: Option[List[Any]] = notPrimitive
-
-  def list: List[Any] = notPrimitive
+  def list: Option[List[Any]] = notPrimitive
 
 }
 
 class ConfigLeaf(val path: String, val value: Any, val asString: String) extends ConfigNode {
   def selectDynamic(segment: String): Nothing = sys.error(s"there's no $segment: path $path is a value not an object")
 
-  def getInt: Option[Int] = Some(int)
+  def int: Option[Int] = Some(value.asInstanceOf[Int])
 
-  def int: Int = value.asInstanceOf[Int]
+  def double: Option[Double] = Some(value.asInstanceOf[Double])
 
-  def getDouble: Option[Double] = Some(double)
+  def string: Option[String] = Some(value.asInstanceOf[String])
 
-  def double: Double = value.asInstanceOf[Double]
+  def boolean: Option[Boolean] = Some(value.asInstanceOf[Boolean])
 
-  def getString: Option[String] = Some(string)
-
-  def string: String = value.asInstanceOf[String]
-
-  def getBoolean: Option[Boolean] = Some(boolean)
-
-  def boolean: Boolean = value.asInstanceOf[Boolean]
-
-  def getList: Option[List[Any]] = Some(list)
-
-  def list: List[Any] = value.asInstanceOf[List[Any]]
+  def list: Option[List[Any]] = Some(value.asInstanceOf[List[Any]])
 }
 
 object root
