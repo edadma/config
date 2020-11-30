@@ -7,7 +7,7 @@ import scala.jdk.CollectionConverters._
 
 abstract class ConfigNode extends Dynamic {
   val path: String
-  val asString: String
+  protected val asString: String
   val value: Any
 
   def selectDynamic(segment: String): ConfigNode
@@ -15,6 +15,8 @@ abstract class ConfigNode extends Dynamic {
   def int: Option[Int]
 
   def double: Option[Double]
+
+  def number: Option[Number]
 
   def string: Option[String]
 
@@ -26,16 +28,16 @@ abstract class ConfigNode extends Dynamic {
 }
 
 class ConfigUndefined(val path: String) extends ConfigNode with Dynamic {
-  val asString = "undefined"
+  protected val asString = "undefined"
   val value: Null = null
-
-  private def undefined = sys.error(s"path $path is undefined")
 
   def selectDynamic(segment: String): ConfigUndefined = this
 
   def int: Option[Int] = None
 
   def double: Option[Double] = None
+
+  def number: Option[Number] = None
 
   def string: Option[String] = None
 
@@ -75,6 +77,8 @@ class ConfigBranch(val path: String, obj: ConfigObject, val value: Map[String, A
 
   def double: Option[Double] = notPrimitive
 
+  def number: Option[Number] = notPrimitive
+
   def string: Option[String] = notPrimitive
 
   def boolean: Option[Boolean] = notPrimitive
@@ -89,6 +93,8 @@ class ConfigLeaf(val path: String, val value: Any, val asString: String) extends
   def int: Option[Int] = Some(value.asInstanceOf[Int])
 
   def double: Option[Double] = Some(value.asInstanceOf[Double])
+
+  def number: Option[Number] = Some(value.asInstanceOf[Number])
 
   def string: Option[String] = Some(value.asInstanceOf[String])
 

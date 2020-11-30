@@ -1,8 +1,8 @@
 name := "config"
 
-version := "0.1.1"
+version := "0.1.2"
 
-scalaVersion := "2.13.3"
+scalaVersion := "2.13.4"
 
 scalacOptions ++= Seq( "-deprecation", "-feature", "-unchecked", "-language:postfixOps", "-language:implicitConversions", "-language:existentials", "-language:dynamics" )
 
